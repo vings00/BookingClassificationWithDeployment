@@ -22,7 +22,8 @@ class YearEncoder(BaseEstimator, TransformerMixin):
         if X.shape[0] != 1:
             X = pd.concat([X, pd.get_dummies(X[self.column], drop_first=True)], axis=1)
         else:
-            X['2018'] = X[X[self.column] == 2018]
+            X.loc[X[self.column] == 2018, '2018'] = 1
+            X['2018'].fillna(0, inplace=True)
         X = X.drop([self.column], axis=1)
         X.columns = X.columns.astype(str)
         return X
